@@ -1,1 +1,3 @@
-console.log('Hello world!');
+import Bear from './game';
+
+Bear.newGame();
