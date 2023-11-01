@@ -1,16 +1,32 @@
 import 'phaser'
 
+// GameConstants: Object = {
+// 	scaleRatio: number = window.devicePixelRatio;
+// }
+
 export default {
-	type: Phaser.AUTO,
-	// backgroundColor: '#FFCC00',
+	title: 'Don\'t Poke the Bear',
+	type: Phaser.WEBGL,
 	backgroundColor: '#000000',
-	pixelArt: true,
-	scale: {
-		mode: Phaser.Scale.CENTER_BOTH,
-		parent: 'phaser-example',
-		autoCenter: Phaser.Scale.CENTER_BOTH,
-		width: 512,
-		height: 512,
-		zoom: 1.0,
+	render: {
+		antialiasGL: false,
+		pixelArt: true,
 	},
+	scale: {
+		mode: Phaser.Scale.ScaleModes.NONE,
+		width: window.innerWidth,
+		height: window.innerHeight,
+	},
+	callbacks: {
+		postBoot: () => {
+			console.log('postBoot callback');
+			// window.sizeChanged();
+		},
+	},
+	canvasStyle: `display: block; width: 100%; height: 100%;`,
+	autoFocus: true,
+	audio: {
+		disableWebAudio: false,
+	},
+	// scene: ['Boot'],
 };
