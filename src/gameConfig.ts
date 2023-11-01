@@ -1,9 +1,5 @@
 import 'phaser'
 
-// GameConstants: Object = {
-// 	scaleRatio: number = window.devicePixelRatio;
-// }
-
 export default {
 	title: 'Don\'t Poke the Bear',
 	type: Phaser.WEBGL,
@@ -15,8 +11,11 @@ export default {
 	},
 	scale: {
 		mode: Phaser.Scale.ScaleModes.NONE,
-		width: window.innerWidth,
-		height: window.innerHeight,
+		// width: window.innerWidth,
+		// height: window.innerHeight,
+		// mode: Phaser.Scale.ScaleModes.RESIZE,
+		height: 320, // 480,
+		width: 480,
 	},
 	callbacks: {
 		postBoot: () => {
@@ -28,6 +27,5 @@ export default {
 	autoFocus: true,
 	audio: {
 		disableWebAudio: false,
-	},
-	// scene: ['Boot'],
+	}
 };
