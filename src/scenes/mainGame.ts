@@ -8,7 +8,5 @@ export default class MainMenu extends Phaser.Scene
 	create ()
 	{
 		console.log('BearPoke New Game Main Menu');
-		this.add.image(100, 100, 'bear');
-
 	}
 }

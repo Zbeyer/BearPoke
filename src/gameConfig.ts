@@ -7,7 +7,8 @@ import 'phaser'
 export default {
 	title: 'Don\'t Poke the Bear',
 	type: Phaser.WEBGL,
-	backgroundColor: '#000000',
+	// backgroundColor: '#000000',
+	backgroundColor: '#101010',
 	render: {
 		antialiasGL: false,
 		pixelArt: true,
