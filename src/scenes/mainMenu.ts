@@ -5,6 +5,14 @@ export default class MainMenu extends Phaser.Scene
 	create ()
 	{
 		const title = 'Hello World';
+		const menuWidth = 320;
+		const menuHeight = this.cameras.main.height;
+		const menuX: number = this.cameras.main.width - menuWidth;
+		const menuY: number = 0;
+
+		// const menuColor = 0xff33cc;
+		const menuColor = 0x883300;
+
 		let text = this.add.text(16, 16, title, { color: '#FFFFFF' })
 		text.setBlendMode(Phaser.BlendModes.ADD);
 		text.scale = 3.0;
@@ -17,7 +25,57 @@ export default class MainMenu extends Phaser.Scene
 
 		this.createAnimals();
 		this.createHeart();
+
+		const rectangle = this.add.rectangle(
+			menuX, menuY,
+			menuWidth, menuHeight,
+			menuColor);
+		rectangle.setOrigin(0, 0);
+		rectangle.setBlendMode(Phaser.BlendModes.MULTIPLY);
+		rectangle.setAlpha(0.50);
+
+		this.createButtons(menuX, menuY, menuWidth);
 		console.log('MainMenu created');
+	}
+
+	createButtons(menuX: number, menuY: number, menuWidth: number)
+	{
+		const buttonOffsetX = 8;
+		const buttonOffsetY = 8;
+		const buttonWidth: number = menuWidth - buttonOffsetX * 2.0;
+		const buttonScale: number = buttonWidth / 40; // the button image is 40px wide
+		const buttonHeight: number = 76.0;
+		const buttons: any[] = [
+			this.add.image(menuX + buttonOffsetX, menuY + buttonOffsetY, 'button'),
+			// game.add.button(menuX + buttonOffsetX, menuY + buttonOffsetY, 'button', function () {
+			// 	console.log('button clicked', arguments);
+			// }, this, 2, 1, 0),
+			this.add.image(menuX + buttonOffsetX, menuY + buttonHeight + buttonOffsetY * 2.0, 'button'),
+			this.add.image(menuX + buttonOffsetX, menuY + buttonHeight * 2.0 + buttonOffsetY * 3.0, 'button'),
+		];
+
+		buttons.forEach( function (button) {
+			button.setOrigin(0, 0);
+			button.setScale(buttonScale);
+		});
+		let x: number = 0;
+		let y: number = 0;
+
+		x = buttons[0].x + buttonOffsetX;
+		y = buttons[0].y + buttonOffsetY;
+		const newGameText = this.add.text(x, y, 'New Game', { color: '#000000' })
+		newGameText.scale = 2.25;
+
+
+		x = buttons[1].x + buttonOffsetX;
+		y = buttons[1].y + buttonOffsetY;
+		const attributionText = this.add.text(x, y, 'Credits', { color: '#000000' })
+		attributionText.scale = 2.25;
+
+		x = buttons[2].x + buttonOffsetX;
+		y = buttons[2].y + buttonOffsetY;
+		const quitText = this.add.text(x, y, 'Quit', { color: '#000000' })
+		quitText.scale = 2.25;
 	}
 
 	createAnimals() {

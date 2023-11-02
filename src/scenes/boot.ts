@@ -17,6 +17,9 @@ export default class BootScene extends Phaser.Scene
 		this.load.image('heartEmpty', 'heart-empty.png');
 		this.load.image('heartBlack', 'heart-black.png');
 		this.load.image('heartFull', 'heart-full.png');
+
+		this.load.image('button', 'button-up.jpg');
+		this.load.image('buttonDown', 'button-down.jpg');
 	}
 
 	create ()
