@@ -7,6 +7,6 @@ export default class MainMenu extends Phaser.Scene
 
 	create ()
 	{
-		console.log('BearPoke New Game Created');
+		console.log('BearPoke Quit Scene Created...');
 	}
 }

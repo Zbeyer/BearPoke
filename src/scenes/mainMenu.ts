@@ -1,9 +1,13 @@
 import 'phaser'
 
+let Game: Phaser.Game;
+
 export default class MainMenu extends Phaser.Scene
 {
 	create ()
 	{
+		Game = this.game;
+
 		const title = 'Hello World';
 		const menuWidth = 320;
 		const menuHeight = this.cameras.main.height;
@@ -40,16 +44,18 @@ export default class MainMenu extends Phaser.Scene
 
 	createButtons(menuX: number, menuY: number, menuWidth: number)
 	{
+		const game: Phaser.Game = Game;
+		const scene = game.scene;
+		let x: number;
+		let y: number;
+
 		const buttonOffsetX = 8;
 		const buttonOffsetY = 8;
 		const buttonWidth: number = menuWidth - buttonOffsetX * 2.0;
 		const buttonScale: number = buttonWidth / 40; // the button image is 40px wide
 		const buttonHeight: number = 76.0;
-		const buttons: any[] = [
+		const buttons: Phaser.GameObjects.Image[] = [
 			this.add.image(menuX + buttonOffsetX, menuY + buttonOffsetY, 'button'),
-			// game.add.button(menuX + buttonOffsetX, menuY + buttonOffsetY, 'button', function () {
-			// 	console.log('button clicked', arguments);
-			// }, this, 2, 1, 0),
 			this.add.image(menuX + buttonOffsetX, menuY + buttonHeight + buttonOffsetY * 2.0, 'button'),
 			this.add.image(menuX + buttonOffsetX, menuY + buttonHeight * 2.0 + buttonOffsetY * 3.0, 'button'),
 		];
@@ -57,25 +63,38 @@ export default class MainMenu extends Phaser.Scene
 		buttons.forEach( function (button) {
 			button.setOrigin(0, 0);
 			button.setScale(buttonScale);
+			button.setInteractive();
 		});
-		let x: number = 0;
-		let y: number = 0;
 
 		x = buttons[0].x + buttonOffsetX;
 		y = buttons[0].y + buttonOffsetY;
 		const newGameText = this.add.text(x, y, 'New Game', { color: '#000000' })
 		newGameText.scale = 2.25;
-
+		buttons[0].on('pointerup', function (){
+			console.log('New Game clicked\n\t%o', 'foo');
+			scene.start('MainGame');
+			scene.stop('MainMenu');
+		}, this);
 
 		x = buttons[1].x + buttonOffsetX;
 		y = buttons[1].y + buttonOffsetY;
 		const attributionText = this.add.text(x, y, 'Credits', { color: '#000000' })
 		attributionText.scale = 2.25;
+		buttons[1].on('pointerup', function (){
+			console.log('Credits clicked\n\t%o', 'foo');
+			scene.start('Credits');
+			scene.stop('MainMenu');
+		}, this);
 
 		x = buttons[2].x + buttonOffsetX;
 		y = buttons[2].y + buttonOffsetY;
 		const quitText = this.add.text(x, y, 'Quit', { color: '#000000' })
 		quitText.scale = 2.25;
+		buttons[2].on('pointerup', function (){
+			console.log('Quit clicked\n\t%o', 'foo');
+			scene.start('Quit');
+			scene.stop('MainMenu');
+		}, this);
 	}
 
 	createAnimals() {
