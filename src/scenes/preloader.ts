@@ -11,22 +11,21 @@ export default class PreloaderScene extends Phaser.Scene
 	create ()
 	{
 		const game = this.game;
-		const scene = game.scene;
-		const width = game.config.width as number;
-		const height = game.config.height as number;
-		const milliseconds = 1000; // Time in milliseconds
+		const logoWidth = this.cameras.main.width * 0.5;
+		const logoHeight = this.cameras.main.height * 0.5;
 
-		let logo = this.add.image(width * 0.5, height * 0.5, 'logo');
-		logo.setScale(6.0);
+		const logo = this.add.image(logoWidth, logoHeight, 'logo');
+		const scaleFactor = Math.min(logoWidth / logo.width, logoHeight / logo.height);
+		const scene = game.scene;
+		const milliseconds = 0.0; // Time in milliseconds
+		
+		logo.setScale(scaleFactor);
 		logo.setAlpha(0.75);
 		logo.setBlendMode(Phaser.BlendModes.ADD);
-		// logo.setTint(0x00FFFF);
-		// logo.setMask()
-
 		setTimeout(function (){
 			scene.stop('Preloader');
 			scene.start('MainMenu');
-		}, milliseconds);
+		}, Math.max(0.0, milliseconds));
 	}
 
 }
