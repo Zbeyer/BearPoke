@@ -4,6 +4,7 @@ export default class Animal
 	art: Phaser.GameObjects.Image;
 	isHealing: boolean = false;
 	isBear: boolean = false;
+	clicked: boolean = false;
 	createdAt: number;
 
 	constructor(art: Phaser.GameObjects.Image, isHealing: boolean = false, isBear: boolean = false)
@@ -13,5 +14,6 @@ export default class Animal
 		this.isHealing = isHealing;
 		this.isBear = isBear;
 		this.createdAt = (new Date()).getTime();
+		this.clicked = false;
 	}
 }
