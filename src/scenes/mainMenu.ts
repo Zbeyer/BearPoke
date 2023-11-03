@@ -82,6 +82,12 @@ export default class MainMenu extends Phaser.Scene
 		buttons[1].on('pointerup', function (){
 			console.log('Credits clicked\n\t%o', 'foo');
 			scene.start('Credits');
+			/**
+			 * Give attribution to the following:
+			 * 		Phaser.io
+			 * 		Pixabay.com
+			 * 		Draw.io
+			 */
 			scene.stop('MainMenu');
 		}, this);
 
