@@ -124,22 +124,23 @@ export default class MainMenu extends Phaser.Scene
 
 	createHeart() {
 		const heartOffsetX = 32;
-		const heartOffsetY = 298;
+		const heartOffsetY = 16;
+		const yPosition = this.cameras.main.height - heartOffsetY;
 		const hearts = [
-			this.add.image(heartOffsetX * 0.50, heartOffsetY, 'heartFull'),
-			this.add.image(heartOffsetX * 1.25, heartOffsetY, 'heartFull'),
-			this.add.image(heartOffsetX * 2.00, heartOffsetY, 'heartFull'),
+			this.add.image(heartOffsetX * 0.50, yPosition, 'heartFull'),
+			this.add.image(heartOffsetX * 1.25, yPosition, 'heartFull'),
+			this.add.image(heartOffsetX * 2.00, yPosition, 'heartFull'),
 		];
 
 		const heartsStroke = [
-			this.add.image(heartOffsetX * 0.50, heartOffsetY, 'heartBlack'),
-			this.add.image(heartOffsetX * 1.25, heartOffsetY, 'heartBlack'),
-			this.add.image(heartOffsetX * 2.00, heartOffsetY, 'heartBlack'),
+			this.add.image(heartOffsetX * 0.50, yPosition, 'heartBlack'),
+			this.add.image(heartOffsetX * 1.25, yPosition, 'heartBlack'),
+			this.add.image(heartOffsetX * 2.00, yPosition, 'heartBlack'),
 		];
 
 		const heartsOutline = [
-			this.add.image(heartOffsetX * 2.75, heartOffsetY, 'heartEmpty'),
-			this.add.image(heartOffsetX * 3.50, heartOffsetY, 'heartEmpty'),
+			this.add.image(heartOffsetX * 2.75, yPosition, 'heartEmpty'),
+			this.add.image(heartOffsetX * 3.50, yPosition, 'heartEmpty'),
 		];
 
 		const scale = 3.0;

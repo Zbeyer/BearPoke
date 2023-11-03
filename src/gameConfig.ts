@@ -10,16 +10,11 @@ export default {
 		pixelArt: true,
 	},
 	scale: {
-		mode: Phaser.Scale.ScaleModes.NONE,
-		// width: window.innerWidth,
-		// height: window.innerHeight,
-		// mode: Phaser.Scale.ScaleModes.RESIZE,
-		height: 320, // 480,
-		width: 480,
+		mode: Phaser.Scale.RESIZE,
+		autoCenter: Phaser.Scale.CENTER_BOTH,
 	},
 	callbacks: {
 		postBoot: () => {
-			console.log('postBoot callback');
 			// window.sizeChanged();
 		},
 	},
