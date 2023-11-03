@@ -97,8 +97,20 @@ export default class MainGame extends Phaser.Scene
 		let newArt: Phaser.GameObjects.Image = this.add.image(x, y, newAnimalName);
 		newArt.setScale(scaleFactor);
 		newArt.setInteractive();
+
+		let scene = this;
 		// newArt.on('pointerup', this.animalClicked);
-		this.input.on('gameobjectdown',this.onObjectClicked);
+		this.input.on('gameobjectdown', function (pointer: Phaser.Input.Pointer, gameObject: Phaser.GameObjects.Image)
+		{
+			shared.animals.forEach( function (animal)
+			{
+
+				if (animal.art == gameObject)
+				{
+					shared.poked(animal);
+				}
+			});
+		});
 		let newAnimal: Animal = new Animal(newArt,
 			healingAnimals.includes(newAnimalName),
 			newAnimalName == 'bear');
@@ -107,45 +119,20 @@ export default class MainGame extends Phaser.Scene
 		shared.lastDraw = (new Date).getTime();
 	}
 
-	onObjectClicked(pointer:Phaser.Input.Pointer , gameObject: Phaser.GameObjects.Image)
-	{
-		let clickedAnimal: Animal;
-		let shared = BearPoke.shared();
-
-		shared.animals.forEach( function (animal)
-		{
-			if (animal.art == gameObject)
-			{
-				clickedAnimal = animal;
-				if (animal.clicked)
-				{
-					return;
-				}
-				animal.clicked = true;
-				console.log('Clicked on %o', animal);
-
-				if (animal.isBear)
-				{
-					shared.bearPokes = shared.bearPokes + 1;
-				}
-				else
-				{
-					shared.pokes = shared.pokes + 1;
-				}
-				console.log('Clicked shared %o', BearPoke.shared());
-			}
-		});
-
-
-		//         this.add.image(400, 300, 'bg');
-		//         this.tweens.add({
-		//             targets: gameObject,
-		//             scale:0.0,
-		//             alpha:0.0,
-		//             duration: 750,
-		//             repeat: -1,
-		//         });
-	}
+	// onObjectClicked(pointer:Phaser.Input.Pointer , gameObject: Phaser.GameObjects.Image)
+	// {
+	//
+	//
+	//
+	// 	//         this.add.image(400, 300, 'bg');
+	// 	//         this.tweens.add({
+	// 	//             targets: gameObject,
+	// 	//             scale:0.0,
+	// 	//             alpha:0.0,
+	// 	//             duration: 750,
+	// 	//             repeat: -1,
+	// 	//         });
+	// }
 
 }
 

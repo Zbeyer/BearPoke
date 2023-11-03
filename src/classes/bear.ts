@@ -47,6 +47,23 @@ class BearPoke //implements BearPokeInterface
 		SharedBP = new BearPoke();
 		return BearPoke.shared();
 	}
+
+	poked(animal: Animal) {
+		if (animal.clicked) return;
+		animal.clicked = true;
+		let shared = BearPoke.shared();
+
+		if (animal.isBear)
+		{
+			shared.bearPokes = shared.bearPokes + 1;
+		}
+		else
+		{
+			shared.pokes = shared.pokes + 1;
+		}
+		console.log('Poked %o', animal);
+		console.log('Bear Game %o', shared);
+	}
 }
 
 let SharedBP: BearPoke;
