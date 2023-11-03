@@ -72,9 +72,10 @@ export default class MainGame extends Phaser.Scene
 		{
 			return;
 		}
-		const scaleFactor = 3.00;
+		const scaleFactor = 4.00;
 		const sizeOfSprite = 16 * scaleFactor;
 
+		let scene = this;
 		let seed: number = Math.random()
 		seed = seed * 1_000;
 		seed = seed + sizeOfSprite;
@@ -91,22 +92,50 @@ export default class MainGame extends Phaser.Scene
 		const animals = this.animals();
 		const healingAnimals = this.healingAnimals();
 		const animalNames: string[] = animals.concat(healingAnimals).concat(['bear']);
+		const appearanceTime = 300;
 
 		let newAnimalIndex: number = Math.floor(seed % animalNames.length);
 		let newAnimalName: string = animalNames[newAnimalIndex];
 		let newArt: Phaser.GameObjects.Image = this.add.image(x, y, newAnimalName);
-		newArt.setScale(scaleFactor);
+		newArt.setScale(0.0);
 		newArt.setInteractive();
+		newArt.alpha = 0.0;
+		let appear:Phaser.Tweens.Tween = scene.tweens.add({
+			targets: newArt,
+			scale: scaleFactor,
+			alpha: 1.0,
+			ease: 'Power1',
+			duration: appearanceTime,
+		});
+		appear.on('complete', function () {
+			appear.remove();
+			console.log('Animal appeared!');
+		});
 
-		let scene = this;
 		// newArt.on('pointerup', this.animalClicked);
 		this.input.on('gameobjectdown', function (pointer: Phaser.Input.Pointer, gameObject: Phaser.GameObjects.Image)
 		{
-			shared.animals.forEach( function (animal)
+			shared.animals.forEach( function (animal: Animal, index: number, array: Animal[])
 			{
-
 				if (animal.art == gameObject)
 				{
+					let disappear:Phaser.Tweens.Tween = scene.tweens.add({
+						targets: gameObject,
+						scale: 0.0,
+						alpha: 0.0,
+						ease: 'Power1',
+						duration: appearanceTime,
+					});
+					disappear.on('complete', function () {
+						disappear.remove();
+						animal.art.destroy();
+						shared.animals = shared.animals.splice(index, 1);
+
+						console.log('Animal destroyed');
+						console.log('Animals: %o', shared.animals);
+						console.log('Animal: %o', animal);
+					});
+
 					shared.poked(animal);
 				}
 			});
@@ -114,9 +143,9 @@ export default class MainGame extends Phaser.Scene
 		let newAnimal: Animal = new Animal(newArt,
 			healingAnimals.includes(newAnimalName),
 			newAnimalName == 'bear');
+
 		/**
-		 * TODO: Add a tween to make the animal appear
-		 * TODO: Add a tween to make the animal disappear
+		 * TODO: Remove the animal from the array when the tween is complete
 		 * TODO: Add hearts
 		 * TODO: Poking the bear removes 2 hearts
 		 * TODO: Poking a healing animal heals 1 heart
@@ -128,21 +157,5 @@ export default class MainGame extends Phaser.Scene
 		shared.animals.push(newAnimal);
 		shared.lastDraw = (new Date).getTime();
 	}
-
-	// onObjectClicked(pointer:Phaser.Input.Pointer , gameObject: Phaser.GameObjects.Image)
-	// {
-	//
-	//
-	//
-	// 	//         this.add.image(400, 300, 'bg');
-	// 	//         this.tweens.add({
-	// 	//             targets: gameObject,
-	// 	//             scale:0.0,
-	// 	//             alpha:0.0,
-	// 	//             duration: 750,
-	// 	//             repeat: -1,
-	// 	//         });
-	// }
-
 }
 
