@@ -23,10 +23,12 @@ module.exports = {
 		'sort-imports': [
 			'warn',
 			{
+				interpretTypes: true,
 				ignoreCase: true,
 				ignoreDeclarationSort: true,
 				ignoreMemberSort: false,
 				memberSyntaxSortOrder: ['none', 'all', 'multiple', 'single'],
+				// allowSeparatedGroups: true,
 			},
 		],
 	},

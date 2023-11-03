@@ -1,12 +1,10 @@
 import 'phaser'
-
-let Game: Phaser.Game;
-
+import BearPoke from '../classes/bear';
 export default class MainMenu extends Phaser.Scene
 {
 	create ()
 	{
-		Game = this.game;
+		const bearPoke = BearPoke.shared();
 
 		const title = 'Hello World';
 		const menuWidth = 320;
@@ -44,7 +42,7 @@ export default class MainMenu extends Phaser.Scene
 
 	createButtons(menuX: number, menuY: number, menuWidth: number)
 	{
-		const game: Phaser.Game = Game;
+		const game: Phaser.Game = this.game;
 		const scene = game.scene;
 		let x: number;
 		let y: number;
