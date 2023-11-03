@@ -12,6 +12,8 @@ class BearPoke //implements BearPokeInterface
 
 	animals: Animal[];
 	pokes: number;
+	score: number;
+	scorecard?: Phaser.GameObjects.Text;
 	isGameOver: boolean;
 
 	constructor()
@@ -25,6 +27,7 @@ class BearPoke //implements BearPokeInterface
 		this.isGameOver = false;
 		this.pokes = 0;
 		this.bearPokes = 0;
+		this.score = 0;
 	}
 	shared(): BearPoke
 	{
@@ -51,18 +54,30 @@ class BearPoke //implements BearPokeInterface
 	poked(animal: Animal) {
 		if (animal.clicked) return;
 		animal.clicked = true;
-		let shared = BearPoke.shared();
 
-		if (animal.isBear)
-		{
+		let name: string = animal.name;
+		let shared: BearPoke = BearPoke.shared();
+
+		//update score
+		if (animal.isHealing) { shared.hearts = Math.min(shared.hearts, shared.hearts + 1); }
+		if (animal.isBear) {
 			shared.bearPokes = shared.bearPokes + 1;
+			shared.hearts = Math.max(0, shared.hearts - 2);
 		}
-		else
+		else { shared.pokes = shared.pokes + 1; }
+		switch (name)
 		{
-			shared.pokes = shared.pokes + 1;
+			case 'snek': shared.score = shared.score + 1; break;
+			case 'deer': shared.score = shared.score + 1; break;
+			case 'fish': shared.score = shared.score + 1; break;
+			case 'duck': shared.score = shared.score + 2; break;
+			case 'sloth': shared.score = shared.score + 3; break;
+			case 'moose': shared.score = shared.score + 5; break;
+			case 'bear': break;
+			default: break;
 		}
-		console.log('Poked %o', animal);
-		console.log('Bear Game %o', shared);
+
+		console.log('Poked %o', name);
 	}
 }
 

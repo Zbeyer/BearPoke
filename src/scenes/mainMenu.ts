@@ -1,5 +1,7 @@
 import 'phaser'
+import BG from '../classes/background';
 import BearPoke from '../classes/bear';
+
 export default class MainMenu extends Phaser.Scene
 {
 	create ()
@@ -25,13 +27,12 @@ export default class MainMenu extends Phaser.Scene
 			'Bear',
 		]);
 
+		let bg: BG = new BG(this);
+
 		this.createAnimals();
 		this.createHeart();
 
-		const rectangle = this.add.rectangle(
-			menuX, menuY,
-			menuWidth, menuHeight,
-			menuColor);
+		const rectangle = this.add.rectangle(menuX, menuY, menuWidth, menuHeight, menuColor);
 		rectangle.setOrigin(0, 0);
 		rectangle.setBlendMode(Phaser.BlendModes.MULTIPLY);
 		rectangle.setAlpha(0.50);
