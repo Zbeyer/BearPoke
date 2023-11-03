@@ -114,6 +114,16 @@ export default class MainGame extends Phaser.Scene
 		let newAnimal: Animal = new Animal(newArt,
 			healingAnimals.includes(newAnimalName),
 			newAnimalName == 'bear');
+		/**
+		 * TODO: Add a tween to make the animal appear
+		 * TODO: Add a tween to make the animal disappear
+		 * TODO: Add hearts
+		 * TODO: Poking the bear removes 2 hearts
+		 * TODO: Poking a healing animal heals 1 heart
+		 * TODO: Not poking anything removes 1 heart
+		 * TODO: Needs a timer
+		 * TODO: Game over when hearts == 0
+		 */
 
 		shared.animals.push(newAnimal);
 		shared.lastDraw = (new Date).getTime();
