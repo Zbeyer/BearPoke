@@ -55,7 +55,7 @@ export default class MainGame extends Phaser.Scene
 		if (shared.hearts < 1)
 		{
 			shared.isGameOver = true;
-			// this.scene.start('GameOver');
+			this.scene.start('GameOver');
 			this.scene.stop('MainGame');
 		}
 	}
