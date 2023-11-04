@@ -1,9 +1,6 @@
 import 'phaser'
 import BearPoke from "../classes/bear";
-import Animal from "../classes/animal";
-import game from "../game";
 import BG from "../classes/background";
-import Bear from "../classes/bear";
 
 export default class MainGame extends Phaser.Scene
 {
@@ -59,6 +56,7 @@ export default class MainGame extends Phaser.Scene
 		{
 			shared.isGameOver = true;
 			// this.scene.start('GameOver');
+			this.scene.stop('MainGame');
 		}
 	}
 
