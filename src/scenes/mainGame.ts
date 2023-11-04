@@ -82,7 +82,6 @@ export default class MainGame extends Phaser.Scene
 			return animalNames.includes(image.texture.key);
 		});
 
-		console.log('animals %o', animals);
 		let shared = BearPoke.shared();
 		if (animals.length >= shared.drawLimit) return;
 		if (shared.isGameOver) return;
@@ -137,6 +136,35 @@ export default class MainGame extends Phaser.Scene
 					// a negative delta means we lost hearts
 					// a positive delta means we gained hearts
 					console.log('delta: %o', delta);
+					let x = gameObject.x;
+					let y = gameObject.y;
+					if (delta < 0)
+					{
+						let heartArt: Phaser.GameObjects.Image[] = 	BearPoke.shared().heartArt;
+						heartArt = heartArt.reverse();
+						let count = Math.abs(delta);
+						// Bear eats the hearts
+						heartArt.forEach(function (heart: Phaser.GameObjects.Image) {
+								if (count >= 1) {
+									heart.destroy();
+									count--;
+								}
+							});
+					}
+					else
+					{
+						// Animal gives a heart
+						let heartArt: Phaser.GameObjects.Image[] = 	BearPoke.shared().heartArt;
+						heartArt = heartArt.reverse();
+						let count = Math.abs(delta);
+						for (let i = count; i > 0; i--)
+						{
+							shared.heartArt.push(scene.add.image(heartArt[0].x + heartArt[0].width + 24, heartArt[0].y, 'heartFull').setScale(3.0));
+						}
+						shared.heartContainer.forEach(function (container: Phaser.GameObjects.Image) {
+							scene.children.bringToTop(container);
+						});
+					}
 				}
 				gameObject.destroy();
 			});
