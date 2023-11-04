@@ -1,6 +1,6 @@
 import 'phaser'
 
-export default class MainMenu extends Phaser.Scene
+export default class Quit extends Phaser.Scene
 {
 	preload ()
 	{ }
@@ -8,5 +8,6 @@ export default class MainMenu extends Phaser.Scene
 	create ()
 	{
 		console.log('BearPoke Quit Scene Created...');
+		this.game.destroy(true);
 	}
 }
