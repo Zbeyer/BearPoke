@@ -85,7 +85,6 @@ export default class MainGame extends Phaser.Scene
 		if (animals.length >= shared.drawLimit) return;
 		if (shared.isGameOver) return;
 		if (shared.drawLimit < 1) return;
-		// console.log('scene.textures.getTextureKeys(): %o', scene.textures.getTextureKeys());
 
 		let seed: number = Math.random()
 		let animalLifeTime: number = 24_000 * seed + 1_000;
@@ -165,10 +164,6 @@ export default class MainGame extends Phaser.Scene
 						});
 					}
 				}
-				console.log('hearts: %o', BearPoke.shared().hearts);
-
-				// console.log('score: %o', BearPoke.shared().score);
-
 				gameObject.destroy();
 			});
 		});
