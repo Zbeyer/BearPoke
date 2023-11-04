@@ -10,6 +10,9 @@ class BearPoke //implements BearPokeInterface
 
 	animals: Animal[];
 	score: number;
+	pokes: number;
+	bearPokes: number;
+	healingAnimals: number;
 	scoreCard?: Phaser.GameObjects.Text;
 	isGameOver: boolean;
 
@@ -21,6 +24,9 @@ class BearPoke //implements BearPokeInterface
 		this.maxHearts = 3;
 		this.hearts = this.maxHearts;
 		this.timer = 0;
+		this.pokes = 0;
+		this.bearPokes = 0;
+		this.healingAnimals = 0;
 		this.drawLimit = 2;
 		this.animals = [];
 
@@ -63,12 +69,19 @@ class BearPoke //implements BearPokeInterface
 		if (animal.poked) return;
 		animal.poked = true;
 		let name = animal.texture.key;
+		if (name === 'bear')
+		{
+			this.bearPokes += 1;
+		} else {
+			this.pokes += 1;
+		}
 		switch (name)
 		{
 			case 'fish':
 				this.hearts += 1;
 				if (this.hearts > this.maxHearts) this.hearts = this.maxHearts;
 				this.score += 1;
+				this.healingAnimals += 1;
 				break;
 			case 'duck':
 			case 'snek':
