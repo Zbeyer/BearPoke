@@ -18,7 +18,7 @@ export default class PreloaderScene extends Phaser.Scene
 		const scaleFactor = Math.min(logoWidth / logo.width, logoHeight / logo.height);
 		const scene = game.scene;
 		const milliseconds = 0.0; // Time in milliseconds
-		
+
 		logo.setScale(scaleFactor);
 		logo.setAlpha(0.75);
 		logo.setBlendMode(Phaser.BlendModes.ADD);

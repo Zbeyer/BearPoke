@@ -9,10 +9,6 @@ export default {
 		antialiasGL: false,
 		pixelArt: true,
 	},
-	scale: {
-		mode: Phaser.Scale.RESIZE,
-		autoCenter: Phaser.Scale.CENTER_BOTH,
-	},
 	callbacks: {
 		postBoot: () => {
 			// window.sizeChanged();

@@ -110,12 +110,12 @@ export default class MainMenu extends Phaser.Scene
 			this.add.image(offsetX, offsetY, 'deer'),
 			this.add.image(offsetX * 2.0, offsetY, 'duck'),
 			this.add.image(offsetX * 3.0, offsetY, 'fish'),
-			this.add.image(offsetX * 4.0, offsetY, 'moose'),
-			this.add.image(offsetX * 5.0, offsetY, 'sloth'),
+			// this.add.image(offsetX * 4.0, offsetY, 'moose'),
+			// this.add.image(offsetX * 5.0, offsetY, 'sloth'),
 			this.add.image(offsetX * 6.0, offsetY, 'snek')
 		];
 		animals.forEach( function (animal) {
-			animal.setScale(3.25);
+			animal.setScale(6.50);
 			animal.setAlpha(0.25);
 			animal.setBlendMode(Phaser.BlendModes.ADD);
 		});
@@ -125,7 +125,7 @@ export default class MainMenu extends Phaser.Scene
 	createHeart() {
 		const heartOffsetX = 32;
 		const heartOffsetY = 16;
-		const yPosition = this.cameras.main.height - heartOffsetY;
+		const yPosition = this.game.canvas.height - heartOffsetY;
 		const hearts = [
 			this.add.image(heartOffsetX * 0.50, yPosition, 'heartFull'),
 			this.add.image(heartOffsetX * 1.25, yPosition, 'heartFull'),

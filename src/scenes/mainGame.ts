@@ -25,15 +25,15 @@ export default class MainGame extends Phaser.Scene
 		let scorecardBG: Phaser.GameObjects.Rectangle = this.add.rectangle(8, 8, 300, 200, 0x000000);
 		scorecardBG.alpha = 0.667;
 
-		let scorecard = this.add.text(16, 16, 'Score: 0', { color: '#FFFFFF' });
-		shared.scorecard = scorecard;
+		let scoreCard = this.add.text(16, 16, 'Score: 0', { color: '#FFFFFF' });
+		shared.scoreCard = scoreCard;
 	}
 
 	update ()
 	{
 		let shared = BearPoke.shared();
-		let scorecard: Phaser.GameObjects.Text = shared.scorecard || this.add.text(16, 16, 'Score: 0', { color: '#FFFFFF' });;
-		scorecard.setText([
+		let scoreCard: Phaser.GameObjects.Text = shared.scoreCard || this.add.text(16, 16, 'Score: 0', { color: '#FFFFFF' });;
+		scoreCard.setText([
 			'score: ' + shared.score,
 			'pokes: ' + shared.pokes,
 			'hearts: ' + shared.hearts,
@@ -42,12 +42,12 @@ export default class MainGame extends Phaser.Scene
 	}
 
 	animals(): string[] {
-		const animals: string[] = ['duck', 'moose', 'sloth', 'snek'];
+		const animals: string[] = ['duck', 'snek', 'deer'];
 		return animals;
 	}
 
 	healingAnimals(): string[] {
-		const animals: string[] = ['deer', 'fish'];
+		const animals: string[] = ['fish'];
 		return animals;
 	}
 
@@ -59,20 +59,20 @@ export default class MainGame extends Phaser.Scene
 		if (shared.drawLimit < 1) return;
 		if (shared.animals.length >= BearPoke.shared().drawLimit) return;
 
-		const scaleFactor = 4.00;
-		const sizeOfSprite = 16 * scaleFactor;
-		const widthMin = sizeOfSprite;
-		const widthMax = scene.cameras.main.width - sizeOfSprite * 2.0;
-		const heightMin = sizeOfSprite;
-		const heightMax = scene.cameras.main.height - sizeOfSprite * 2.0;
-		const animalNames: string[] = scene.animals().concat(scene.healingAnimals()).concat(['bear']);
-		const appearanceTime = 300;
-		const animalLifeTime = 3000;
-
 		let seed: number = Math.random()
-		seed = seed * 1_000;
-		seed = seed + sizeOfSprite;
+		let animalLifeTime: number = 8_000 * seed + 1_000;
+		seed = seed * 2_000;
 
+		const scaleFactor = 8.00;
+		const sizeOfSprite = 8 * scaleFactor;
+
+		const widthMin = sizeOfSprite;
+		const widthMax = scene.cameras.main.width - sizeOfSprite;
+		const heightMin = sizeOfSprite;
+		const heightMax = scene.cameras.main.height - sizeOfSprite;
+
+		const animalNames: string[] = scene.animals().concat(scene.healingAnimals()).concat(['bear']);
+		const appearanceTime = 250;
 		let x = widthMin + seed % widthMax;
 		let y = heightMin + seed % heightMax;
 		let newAnimalIndex: number = Math.floor(seed % animalNames.length);

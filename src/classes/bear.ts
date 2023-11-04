@@ -13,7 +13,7 @@ class BearPoke //implements BearPokeInterface
 	animals: Animal[];
 	pokes: number;
 	score: number;
-	scorecard?: Phaser.GameObjects.Text;
+	scoreCard?: Phaser.GameObjects.Text;
 	isGameOver: boolean;
 
 	constructor()
