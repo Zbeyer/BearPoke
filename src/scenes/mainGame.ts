@@ -63,9 +63,8 @@ export default class MainGame extends Phaser.Scene
 	}
 
 	animals(): string[] {
-		// const animals: string[] = ['duck', 'snek', 'deer'];
-		// return animals;
-		return [];
+		const animals: string[] = ['duck', 'snek', 'deer'];
+		return animals;
 	}
 
 	healingAnimals(): string[] {
