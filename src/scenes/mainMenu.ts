@@ -106,9 +106,9 @@ export default class MainMenu extends Phaser.Scene
 			this.add.image(offsetX, offsetY, 'deer'),
 			this.add.image(offsetX * 2.0, offsetY, 'duck'),
 			this.add.image(offsetX * 3.0, offsetY, 'fish'),
-			// this.add.image(offsetX * 4.0, offsetY, 'moose'),
-			// this.add.image(offsetX * 5.0, offsetY, 'sloth'),
-			this.add.image(offsetX * 6.0, offsetY, 'snek')
+			this.add.image(offsetX * 4.0, offsetY, 'snek')
+			// this.add.image(offsetX * 5.0, offsetY, 'moose'),
+			// this.add.image(offsetX * 6.0, offsetY, 'sloth'),
 		];
 		animals.forEach( function (animal) {
 			animal.setScale(6.50);
