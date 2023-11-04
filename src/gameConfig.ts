@@ -9,8 +9,14 @@ export default {
 		antialiasGL: false,
 		pixelArt: true,
 	},
+	scale: {
+		mode: Phaser.Scale.ScaleModes.NONE,
+		height: 420, // 480,
+		width: 640,
+	},
 	callbacks: {
 		postBoot: () => {
+			console.log('postBoot callback');
 			// window.sizeChanged();
 		},
 	},

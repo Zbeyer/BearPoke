@@ -3,6 +3,7 @@ import BearPoke from "../classes/bear";
 import Animal from "../classes/animal";
 import game from "../game";
 import BG from "../classes/background";
+import Bear from "../classes/bear";
 
 export default class MainGame extends Phaser.Scene
 {
@@ -12,7 +13,7 @@ export default class MainGame extends Phaser.Scene
 	create ()
 	{
 		BearPoke.newGame();
-		const frameRate = 2.4;
+		const frameRate = 60.0;
 
 		// let shared = BearPoke.shared();
 		let scene = this;
@@ -22,11 +23,27 @@ export default class MainGame extends Phaser.Scene
 		}, 1000 / frameRate);
 
 		let bg: BG = new BG(this);
-		let scorecardBG: Phaser.GameObjects.Rectangle = this.add.rectangle(8, 8, 300, 200, 0x000000);
+		let scorecardBG: Phaser.GameObjects.Rectangle = this.add.rectangle(0, 0, 180, 24, 0x000000);
+		scorecardBG.setOrigin(0, 0);
 		scorecardBG.alpha = 0.667;
 
-		let scoreCard = this.add.text(16, 16, 'Score: 0', { color: '#FFFFFF' });
+		let scoreCard = this.add.text(4, 4, 'Score: 0', { color: '#FFFFFF' });
+		scoreCard.setOrigin(0, 0);
 		shared.scoreCard = scoreCard;
+
+		let heartsBg: Phaser.GameObjects.Rectangle = this.add.rectangle(0, this.cameras.main.height - 16, 192, 32, 0x000000);
+		heartsBg.alpha = 0.667;
+		let hearts = [
+			this.add.image(16, this.cameras.main.height - 16, 'heartFull'),
+			this.add.image(48, this.cameras.main.height - 16, 'heartFull'),
+			this.add.image(80, this.cameras.main.height - 16, 'heartFull'),
+		];
+		hearts.forEach(function (heart: Phaser.GameObjects.Image) {
+			heart.setScale(3.0);
+			let container = scene.add.image(heart.x, heart.y, 'heartEmpty').setScale(3.0);
+			shared.heartArt.push(heart);
+			shared.heartContainer.push(container);
+		});
 	}
 
 	update ()
@@ -35,10 +52,13 @@ export default class MainGame extends Phaser.Scene
 		let scoreCard: Phaser.GameObjects.Text = shared.scoreCard || this.add.text(16, 16, 'Score: 0', { color: '#FFFFFF' });;
 		scoreCard.setText([
 			'score: ' + shared.score,
-			'pokes: ' + shared.pokes,
-			'hearts: ' + shared.hearts,
-			'bearPokes: ' + shared.bearPokes,
 		]);
+
+		if (shared.hearts < 1)
+		{
+			shared.isGameOver = true;
+			// this.scene.start('GameOver');
+		}
 	}
 
 	animals(): string[] {
@@ -53,25 +73,33 @@ export default class MainGame extends Phaser.Scene
 
 	draw(scene: MainGame)
 	{
+		let children = scene.children.list;
+		let images = children.filter(function (child: any) {
+			return child.texture && child.texture.key;
+		});
+		const animalNames: string[] = scene.animals().concat(scene.healingAnimals()).concat(['bear']);
+		let animals = images.filter(function (image: any) {
+			return animalNames.includes(image.texture.key);
+		});
+
+		console.log('animals %o', animals);
 		let shared = BearPoke.shared();
-		shared.lastDraw = (new Date).getTime();
+		if (animals.length >= shared.drawLimit) return;
 		if (shared.isGameOver) return;
 		if (shared.drawLimit < 1) return;
-		if (shared.animals.length >= BearPoke.shared().drawLimit) return;
+		// console.log('scene.textures.getTextureKeys(): %o', scene.textures.getTextureKeys());
 
 		let seed: number = Math.random()
-		let animalLifeTime: number = 8_000 * seed + 1_000;
+		let animalLifeTime: number = 24_000 * seed + 1_000;
 		seed = seed * 2_000;
 
 		const scaleFactor = 8.00;
 		const sizeOfSprite = 8 * scaleFactor;
 
 		const widthMin = sizeOfSprite;
-		const widthMax = scene.cameras.main.width - sizeOfSprite;
+		const widthMax = scene.cameras.main.width - sizeOfSprite * 2.0;
 		const heightMin = sizeOfSprite;
-		const heightMax = scene.cameras.main.height - sizeOfSprite;
-
-		const animalNames: string[] = scene.animals().concat(scene.healingAnimals()).concat(['bear']);
+		const heightMax = scene.cameras.main.height - sizeOfSprite * 2.0;
 		const appearanceTime = 250;
 		let x = widthMin + seed % widthMax;
 		let y = heightMin + seed % heightMax;
@@ -80,54 +108,48 @@ export default class MainGame extends Phaser.Scene
 		let newArt: Phaser.GameObjects.Image = scene.add.image(x, y, newAnimalName);
 		newArt.alpha = 0.0; newArt.setScale(0.0);
 		newArt.setInteractive();
+
+		// Make sure we are always tracking the animals...
 		let appear:Phaser.Tweens.Tween = scene.tweens.add({targets: newArt, scale: scaleFactor, alpha: 1.0, ease: 'Power1', duration: appearanceTime });
 		appear.on('complete', function () {
 			newArt.setScale(scaleFactor);
 			newArt.alpha = 1.0;
-			newArt.setInteractive();
 			appear.remove();
 
-			let newAnimal: Animal = new Animal(newArt, scene.healingAnimals().includes(newAnimalName), newAnimalName == 'bear');
-			shared.animals.push(newAnimal);
 			let disappear:Phaser.Tweens.Tween = scene.tweens.add({targets: newArt, scale: 0.0, alpha: 0.0, ease: 'Power1', duration: appearanceTime, delay: animalLifeTime});
 			disappear.on('complete', function () {
 				disappear.remove();
-				scene.cleanup(newAnimal);
+				newArt.destroy();
 			});
-
-			newAnimal.createdAt = (new Date()).getTime();
 		});
 
 		scene.input.on('gameobjectdown', function (pointer: Phaser.Input.Pointer, gameObject: Phaser.GameObjects.Image)
 		{
-			shared.animals.forEach( function (animal: Animal, index: number, array: Animal[]) {
-				if (animal.art == gameObject) {
-					let disappearNow:Phaser.Tweens.Tween = scene.tweens.add({ targets: gameObject, scale: 0.0, alpha: 0.0, ease: 'Power1', duration: appearanceTime});
-					disappearNow.on('complete', function () {
-						disappearNow.remove();
-						scene.cleanup(animal);
-					});
-					shared.poked(animal);
+			let disappearNow:Phaser.Tweens.Tween = scene.tweens.add({ targets: gameObject, scale: 0.0, alpha: 0.0, ease: 'Power1', duration: appearanceTime});
+			disappearNow.on('complete', function () {
+				disappearNow.remove();
+				let heartsBeforePoke = BearPoke.shared().hearts;
+				BearPoke.shared().poked(gameObject);
+				let heartsAfterPoke = BearPoke.shared().hearts;
+				let delta = heartsAfterPoke - heartsBeforePoke;
+				if (delta)
+				{
+					// a negative delta means we lost hearts
+					// a positive delta means we gained hearts
+					console.log('delta: %o', delta);
 				}
+				gameObject.destroy();
 			});
 		});
 
 		/**
-		 * TODO: Remove the animal from the array when the tween is complete
-		 * TODO: Add hearts
-		 * TODO: Not poking anything removes 1 heart
 		 * TODO: Needs a timer
+	 	 *		Not poking anything removes 1 heart
 		 * TODO: Game over when hearts == 0
+		 * 		I think I'll just make a game over scene
+		 * 		New Game just makes a new Main Game Scene
 		 */
 	}
 
-	cleanup(animal: Animal)
-	{
-		let shared = BearPoke.shared();
-		animal.art.destroy();
-		shared.animals.forEach(function (a: Animal, index: number, array: Animal[]) {
-			shared.animals = shared.animals.splice(index, 1);
-		});
-	}
 }
 
