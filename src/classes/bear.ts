@@ -18,7 +18,7 @@ class BearPoke //implements BearPokeInterface
 
 	constructor()
 	{
-		this.maxHearts = 13;
+		this.maxHearts = 3;
 		this.hearts = this.maxHearts;
 		this.timer = 0;
 		this.drawLimit = 2;
