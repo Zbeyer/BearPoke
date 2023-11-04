@@ -1,6 +1,6 @@
 import 'phaser'
 
-export default class MainMenu extends Phaser.Scene
+export default class Credit extends Phaser.Scene
 {
 	preload ()
 	{ }
