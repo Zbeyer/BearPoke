@@ -38,7 +38,6 @@ export default class MainMenu extends Phaser.Scene
 		rectangle.setAlpha(0.50);
 
 		this.createButtons(menuX, menuY, menuWidth);
-		console.log('MainMenu created');
 	}
 
 	createButtons(menuX: number, menuY: number, menuWidth: number)
@@ -70,7 +69,6 @@ export default class MainMenu extends Phaser.Scene
 		const newGameText = this.add.text(x, y, 'New Game', { color: '#000000' })
 		newGameText.scale = 2.25;
 		buttons[0].on('pointerup', function (){
-			console.log('New Game clicked\n\t%o', 'foo');
 			scene.start('MainGame');
 			scene.stop('MainMenu');
 		}, this);
@@ -80,7 +78,6 @@ export default class MainMenu extends Phaser.Scene
 		const attributionText = this.add.text(x, y, 'Credits', { color: '#000000' })
 		attributionText.scale = 2.25;
 		buttons[1].on('pointerup', function (){
-			console.log('Credits clicked\n\t%o', 'foo');
 			scene.start('Credits');
 			/**
 			 * Give attribution to the following:
@@ -96,7 +93,6 @@ export default class MainMenu extends Phaser.Scene
 		const quitText = this.add.text(x, y, 'Quit', { color: '#000000' })
 		quitText.scale = 2.25;
 		buttons[2].on('pointerup', function (){
-			console.log('Quit clicked\n\t%o', 'foo');
 			scene.start('Quit');
 			scene.stop('MainMenu');
 		}, this);
