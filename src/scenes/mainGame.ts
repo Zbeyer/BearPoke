@@ -41,10 +41,10 @@ export default class MainGame extends Phaser.Scene
 			shared.heartArt.push(newHeartArt);
 		}
 
-		// shared.heartArt.forEach(function (heart: Phaser.GameObjects.Image) {
-		// 	let container = scene.add.image(heart.x, heart.y, 'heartEmpty').setScale(3.0);
-		// 	shared.heartContainer.push(container);
-		// });
+		shared.heartArt.forEach(function (heart: Phaser.GameObjects.Image) {
+			let container = scene.add.image(heart.x, heart.y, 'heartEmpty').setScale(3.0);
+			shared.heartContainer.push(container);
+		});
 	}
 
 	update ()
