@@ -6,3 +6,4 @@
 # DS_Store created by Mac automatically. I Don't know why.
 .DS_Store
 */.DS_Store
+dist/

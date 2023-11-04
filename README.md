@@ -19,3 +19,13 @@ Run project
 ```bash
 yarn dev
 ```
+---
+
+Build project
+
+```bash
+yarn build
+```
+Outputs to `dist` folder. Not sure why assets aren't loading (yet).
+
+---
