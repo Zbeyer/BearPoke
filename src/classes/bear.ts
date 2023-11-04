@@ -3,7 +3,7 @@ import Animal from "./animal";
 class BearPoke //implements BearPokeInterface
 {
 	scene?: Phaser.Scene;
-
+	maxHearts: number;
 	hearts: number;
 	timer: number;
 	drawLimit: number;
@@ -18,7 +18,8 @@ class BearPoke //implements BearPokeInterface
 
 	constructor()
 	{
-		this.hearts = 3;
+		this.maxHearts = 13;
+		this.hearts = this.maxHearts;
 		this.timer = 0;
 		this.drawLimit = 2;
 		this.animals = [];
@@ -65,7 +66,8 @@ class BearPoke //implements BearPokeInterface
 		switch (name)
 		{
 			case 'fish':
-				this.hearts = Math.min(3, this.hearts + 1);
+				this.hearts += 1;
+				if (this.hearts > this.maxHearts) this.hearts = this.maxHearts;
 				this.score += 1;
 				break;
 			case 'duck':
@@ -79,7 +81,9 @@ class BearPoke //implements BearPokeInterface
 				this.score += 5;
 				break;
 			case 'bear':
-				this.hearts = Math.max(0, this.hearts - 2);
+				console.log('bear poked');
+				this.hearts -= 2;
+				if (this.hearts < 1) this.hearts = 0;
 				break;
 			default: break;
 		}

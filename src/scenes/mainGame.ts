@@ -31,19 +31,20 @@ export default class MainGame extends Phaser.Scene
 		scoreCard.setOrigin(0, 0);
 		shared.scoreCard = scoreCard;
 
-		let heartsBg: Phaser.GameObjects.Rectangle = this.add.rectangle(0, this.cameras.main.height - 16, 192, 32, 0x000000);
+		let heartsBg: Phaser.GameObjects.Rectangle = this.add.rectangle(0, this.cameras.main.height - 16,
+			shared.hearts * 64 + 16, 32 + 16,
+			0x000000);
 		heartsBg.alpha = 0.667;
-		let hearts = [
-			this.add.image(16, this.cameras.main.height - 16, 'heartFull'),
-			this.add.image(48, this.cameras.main.height - 16, 'heartFull'),
-			this.add.image(80, this.cameras.main.height - 16, 'heartFull'),
-		];
-		hearts.forEach(function (heart: Phaser.GameObjects.Image) {
-			heart.setScale(3.0);
-			let container = scene.add.image(heart.x, heart.y, 'heartEmpty').setScale(3.0);
-			shared.heartArt.push(heart);
-			shared.heartContainer.push(container);
-		});
+		for (let i = 0; i < shared.hearts; i++)
+		{
+			let newHeartArt: Phaser.GameObjects.Image = scene.add.image(16 + i * 32, this.cameras.main.height - 16, 'heartFull').setScale(3.0);
+			shared.heartArt.push(newHeartArt);
+		}
+
+		// shared.heartArt.forEach(function (heart: Phaser.GameObjects.Image) {
+		// 	let container = scene.add.image(heart.x, heart.y, 'heartEmpty').setScale(3.0);
+		// 	shared.heartContainer.push(container);
+		// });
 	}
 
 	update ()
@@ -62,8 +63,9 @@ export default class MainGame extends Phaser.Scene
 	}
 
 	animals(): string[] {
-		const animals: string[] = ['duck', 'snek', 'deer'];
-		return animals;
+		// const animals: string[] = ['duck', 'snek', 'deer'];
+		// return animals;
+		return [];
 	}
 
 	healingAnimals(): string[] {
@@ -127,45 +129,49 @@ export default class MainGame extends Phaser.Scene
 			let disappearNow:Phaser.Tweens.Tween = scene.tweens.add({ targets: gameObject, scale: 0.0, alpha: 0.0, ease: 'Power1', duration: appearanceTime});
 			disappearNow.on('complete', function () {
 				disappearNow.remove();
+				if (BearPoke.shared().isGameOver) return;
+				let animal: any = gameObject;
+				let poked: boolean = animal.poked || false;
 				let heartsBeforePoke = BearPoke.shared().hearts;
 				BearPoke.shared().poked(gameObject);
+				if (poked) return;
 				let heartsAfterPoke = BearPoke.shared().hearts;
+				// a negative delta means we lost hearts
+				// a positive delta means we gained hearts
 				let delta = heartsAfterPoke - heartsBeforePoke;
 				if (delta)
 				{
-					// a negative delta means we lost hearts
-					// a positive delta means we gained hearts
-					console.log('delta: %o', delta);
-					let x = gameObject.x;
-					let y = gameObject.y;
+					// let x = gameObject.x;
+					// let y = gameObject.y;
+					let count = Math.abs(delta);
 					if (delta < 0)
 					{
-						let heartArt: Phaser.GameObjects.Image[] = 	BearPoke.shared().heartArt;
-						heartArt = heartArt.reverse();
-						let count = Math.abs(delta);
-						// Bear eats the hearts
-						heartArt.forEach(function (heart: Phaser.GameObjects.Image) {
-								if (count >= 1) {
-									heart.destroy();
-									count--;
-								}
-							});
+						for (let i = count; i > 0; i--)
+						{
+							let heart = shared.heartArt[shared.heartArt.length - 1];
+							heart.destroy(); // Bear eats the hearts
+							shared.heartArt.pop();
+						}
 					}
 					else
 					{
-						// Animal gives a heart
-						let heartArt: Phaser.GameObjects.Image[] = 	BearPoke.shared().heartArt;
-						heartArt = heartArt.reverse();
-						let count = Math.abs(delta);
+						let art: Phaser.GameObjects.Image = BearPoke.shared().heartArt[0];
 						for (let i = count; i > 0; i--)
 						{
-							shared.heartArt.push(scene.add.image(heartArt[0].x + heartArt[0].width + 24, heartArt[0].y, 'heartFull').setScale(3.0));
+							let index = shared.heartArt.length;
+							let posX = index * 32 + 16;
+							let newHeartArt: Phaser.GameObjects.Image = scene.add.image(posX, art.y, 'heartFull').setScale(3.0);
+							shared.heartArt.push(newHeartArt); // Animal gives a heart
 						}
 						shared.heartContainer.forEach(function (container: Phaser.GameObjects.Image) {
 							scene.children.bringToTop(container);
 						});
 					}
 				}
+				console.log('hearts: %o', BearPoke.shared().hearts);
+
+				// console.log('score: %o', BearPoke.shared().score);
+
 				gameObject.destroy();
 			});
 		});
