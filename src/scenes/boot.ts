@@ -13,6 +13,8 @@ export default class BootScene extends Phaser.Scene
 		//logo
 		this.load.image('logo', 'logo.jpg');
 
+		this.load.image('pokeDust', 'poke-dust.jpg');
+
 		//animals
 		this.load.image('bear', 'bear.png');
 		this.load.image('deer', 'deer.png');

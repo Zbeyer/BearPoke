@@ -64,6 +64,35 @@ export default class MainGame extends Phaser.Scene
 		}, 1000 / frameRate);
 	}
 
+	drawPokeDust(scene: MainGame, x: number = 0, y: number = 0)
+	{
+		const key = 'pokeDust';
+		const lifeTime = 750;
+		// let emitter = new Phaser.Events.EventEmitter();
+		let emitter = scene.add.particles(x, y, key,
+			{
+			scale: { min: 2.0, max: 6.0 },
+			speed: { min: 30, max: 80 },
+			alpha: { start: 1, end: 0 },
+			lifespan: lifeTime,
+			frequency: 50,
+			gravityY: -210,
+			particleBringToTop: true,
+		});
+
+		let timeoutStopEmitting = setTimeout(() => {
+			emitter.stop();
+			clearTimeout(timeoutStopEmitting);
+			// timeout = null;
+		}, lifeTime);
+
+		let timeoutDestroy = setTimeout(() => {
+			emitter.destroy();
+			clearTimeout(timeoutDestroy);
+			// timeout = null;
+		}, lifeTime * 3.0);
+	}
+
 	update ()
 	{
 		let shared = BearPoke.shared();
@@ -177,6 +206,7 @@ export default class MainGame extends Phaser.Scene
 		scene.input.on('gameobjectdown', function (pointer: Phaser.Input.Pointer, gameObject: Phaser.GameObjects.Image)
 		{
 			let disappearNow:Phaser.Tweens.Tween = scene.tweens.add({ targets: gameObject, scale: 0.0, alpha: 0.0, ease: 'Power1', duration: appearanceTime});
+			scene.drawPokeDust(scene, gameObject.x, gameObject.y);
 			disappearNow.on('complete', function () {
 				disappearNow.remove();
 				if (BearPoke.shared().isGameOver) return;
