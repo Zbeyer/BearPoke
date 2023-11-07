@@ -50,13 +50,17 @@ export default class MainGame extends Phaser.Scene
 		let timer: Phaser.GameObjects.Rectangle = scene.add.rectangle(timerBG.x, timerBG.y, shared.timerArtWidth, timerBG.height, 0xFFCC00);
 		timer.setOrigin(0, 0);
 		shared.timerArt = timer;
-		setInterval(function () {
+		let gameLoop = setInterval(function () {
 			if (scene)
 			{
 				scene.draw(scene);
 				scene.drawTimer(scene);
+				console.log('gameLoop: %o', new Date().getTime());
+				if (BearPoke.shared().isGameOver)
+				{
+					clearInterval(gameLoop);
+				}
 			}
-			//ZBeyer when the scene is destroyed, this interval is still running...
 		}, 1000 / frameRate);
 	}
 
