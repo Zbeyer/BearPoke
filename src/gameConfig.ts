@@ -11,8 +11,8 @@ export default {
 	},
 	scale: {
 		mode: Phaser.Scale.ScaleModes.NONE,
-		height: 420, // 480,
-		width: 640,
+		height: 640, // 480,
+		width: 480,
 	},
 	callbacks: {
 		postBoot: () => {

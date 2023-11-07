@@ -5,28 +5,31 @@ class BearPoke //implements BearPokeInterface
 	scene?: Phaser.Scene;
 	maxHearts: number;
 	hearts: number;
-	timer: number;
 	drawLimit: number;
+	lastPoke: number;
 
 	animals: Animal[];
 	score: number;
 	pokes: number;
 	bearPokes: number;
 	healingAnimals: number;
-	scoreCard?: Phaser.GameObjects.Text;
 	isGameOver: boolean;
+	timerArtWidth: number;
 
 	heartArt: Phaser.GameObjects.Image[];
 	heartContainer: Phaser.GameObjects.Image[];
+	scoreCard?: Phaser.GameObjects.Text;
+	timerArt?: Phaser.GameObjects.Rectangle;
 
 	constructor()
 	{
 		this.maxHearts = 3;
 		this.hearts = this.maxHearts;
-		this.timer = 0;
 		this.pokes = 0;
 		this.bearPokes = 0;
 		this.healingAnimals = 0;
+		this.timerArtWidth = 0;
+		this.lastPoke = (new Date()).getTime();
 		this.drawLimit = 2;
 		this.animals = [];
 
@@ -62,6 +65,7 @@ class BearPoke //implements BearPokeInterface
 	{
 		let shared = BearPoke.shared();
 		shared.hearts = Math.max(0, shared.hearts - 1);
+		shared.lastPoke = (new Date()).getTime();
 	}
 
 	poked(animal: any)

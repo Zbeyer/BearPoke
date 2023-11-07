@@ -2,6 +2,8 @@ import 'phaser'
 import BearPoke from "../classes/bear";
 import BG from "../classes/background";
 
+let IsDebug = false;
+
 export default class MainGame extends Phaser.Scene
 {
 	preload ()
@@ -15,9 +17,6 @@ export default class MainGame extends Phaser.Scene
 		// let shared = BearPoke.shared();
 		let scene = this;
 		let shared = BearPoke.shared();
-		setInterval(function () {
-			scene.draw(scene);
-		}, 1000 / frameRate);
 
 		let bg: BG = new BG(this);
 		let scorecardBG: Phaser.GameObjects.Rectangle = this.add.rectangle(0, 0, 180, 24, 0x000000);
@@ -28,9 +27,10 @@ export default class MainGame extends Phaser.Scene
 		scoreCard.setOrigin(0, 0);
 		shared.scoreCard = scoreCard;
 
-		let heartsBg: Phaser.GameObjects.Rectangle = this.add.rectangle(0, this.cameras.main.height - 16,
-			shared.hearts * 64 + 16, 32 + 16,
+		let heartsBg: Phaser.GameObjects.Rectangle = this.add.rectangle(0, this.cameras.main.height - 32,
+			shared.hearts * 32, 32,
 			0x000000);
+		heartsBg.setOrigin(0, 0);
 		heartsBg.alpha = 0.667;
 		for (let i = 0; i < shared.hearts; i++)
 		{
@@ -42,6 +42,22 @@ export default class MainGame extends Phaser.Scene
 			let container = scene.add.image(heart.x, heart.y, 'heartEmpty').setScale(3.0);
 			shared.heartContainer.push(container);
 		});
+
+		let timerBG: Phaser.GameObjects.Rectangle = scene.add.rectangle(heartsBg.x + heartsBg.width, heartsBg.y, scene.cameras.main.width - heartsBg.width, heartsBg.height, 0x000000);
+		timerBG.setOrigin(0, 0);
+		shared.timerArtWidth = timerBG.width;
+
+		let timer: Phaser.GameObjects.Rectangle = scene.add.rectangle(timerBG.x, timerBG.y, shared.timerArtWidth, timerBG.height, 0xFFCC00);
+		timer.setOrigin(0, 0);
+		shared.timerArt = timer;
+		setInterval(function () {
+			if (scene)
+			{
+				scene.draw(scene);
+				scene.drawTimer(scene);
+			}
+			//ZBeyer when the scene is destroyed, this interval is still running...
+		}, 1000 / frameRate);
 	}
 
 	update ()
@@ -70,6 +86,40 @@ export default class MainGame extends Phaser.Scene
 		return animals;
 	}
 
+	drawTimer(scene: MainGame)
+	{
+		let shared = BearPoke.shared();
+		if (shared.isGameOver) return;
+
+		const timerLifeTime: number = IsDebug ? 18_000 : 1_800;
+
+		let now = new Date().getTime();
+		let lastPoke = BearPoke.shared().lastPoke || now;
+		if (lastPoke == 0) return;
+		let timeDelta = now - lastPoke;
+		if (shared.hearts < 1) return;
+
+		let lifeRatio = 1.0 - (timeDelta / timerLifeTime);
+		let pokeTimerWidth = lifeRatio * shared.timerArtWidth;
+		let timer: Phaser.GameObjects.Rectangle = shared.timerArt || scene.add.rectangle(0, 0, pokeTimerWidth, 64, 0xFFCC00);
+		timer.width = pokeTimerWidth;
+
+		let heartsBeforeNotPoking = shared.hearts;
+		if (timeDelta >= timerLifeTime) BearPoke.shared().didntPokeAnything()
+		let heartsAfterNotPoking = shared.hearts;
+
+		let heartDelta = heartsAfterNotPoking - heartsBeforeNotPoking;
+		if (heartDelta < 0)
+		{
+			let heart = shared.heartArt[shared.heartArt.length - 1];
+			let dropHeart = scene.add.tween({targets: heart, scale: 0.0, alpha: 0.0, y:heart.y + heart.height, ease: 'Power1', duration: 250});
+			dropHeart.on('complete', function () {
+				heart.destroy(); // Time drops a heart
+				shared.heartArt.pop();
+			});
+		}
+	}
+
 	draw(scene: MainGame)
 	{
 		let children = scene.children.list;
@@ -87,7 +137,7 @@ export default class MainGame extends Phaser.Scene
 		if (shared.drawLimit < 1) return;
 
 		let seed: number = Math.random()
-		let animalLifeTime: number = 24_000 * seed + 1_000;
+		let animalLifeTime: number = IsDebug ? 10_000 : 1_000 * seed + 500;
 		seed = seed * 2_000;
 
 		const scaleFactor = 8.00;
@@ -126,6 +176,7 @@ export default class MainGame extends Phaser.Scene
 			disappearNow.on('complete', function () {
 				disappearNow.remove();
 				if (BearPoke.shared().isGameOver) return;
+				shared.lastPoke = (new Date()).getTime();
 				let animal: any = gameObject;
 				let poked: boolean = animal.poked || false;
 				let heartsBeforePoke = BearPoke.shared().hearts;

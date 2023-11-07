@@ -1,5 +1,6 @@
 import 'phaser'
 import BearPoke from "../classes/bear";
+import BG from "../classes/background";
 
 export default class GameOver extends Phaser.Scene
 {
@@ -8,10 +9,16 @@ export default class GameOver extends Phaser.Scene
 
 	create ()
 	{
-		const menuWidth = 320;
+		const menuWidth = this.cameras.main.width * 0.50;
 		const menuHeight = this.cameras.main.height;
 		const menuX: number = this.cameras.main.width - menuWidth;
 		const menuY: number = 0;
+
+		let bg: BG = new BG(this);
+		let scoreBG: Phaser.GameObjects.Rectangle = this.add.rectangle(0, 0, this.cameras.main.width - menuWidth, this.cameras.main.height, 0x000000);
+		scoreBG.setOrigin(0, 0);
+		scoreBG.setBlendMode(Phaser.BlendModes.MULTIPLY);
+		scoreBG.setAlpha(0.667);
 
 		let text = this.add.text(16, 16, 'title', { color: '#FFFFFF' });
 		text.setBlendMode(Phaser.BlendModes.ADD);
@@ -21,6 +28,7 @@ export default class GameOver extends Phaser.Scene
 			'Over',
 		]);
 
+
 		let scoreText = this.add.text(16, text.y * 2 + text.height * 2 + 64, 'score', { color: '#FFFFFF' });
 		scoreText.setBlendMode(Phaser.BlendModes.ADD);
 		scoreText.scale = 2.0;
@@ -28,7 +36,8 @@ export default class GameOver extends Phaser.Scene
 			'Score: ' + BearPoke.shared().score,
 			'Pokes: ' + BearPoke.shared().pokes,
 			'Healz: ' + BearPoke.shared().healingAnimals,
-			'Bear Pokes: ' + BearPoke.shared().bearPokes,
+			'',
+			'Bear Pokes:\n' + BearPoke.shared().bearPokes,
 
 		]);
 		const rectangle = this.add.rectangle(menuX, menuY, menuWidth, menuHeight, 0x000000);
