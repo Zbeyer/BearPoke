@@ -27,7 +27,7 @@ export default class MainMenu extends Phaser.Scene
 			'Bear',
 		]);
 
-		let bg: BG = new BG(this);
+		let bg: Phaser.GameObjects.Image = new BG(this).backgroundImage;
 
 		this.createAnimals();
 		this.createHeart();

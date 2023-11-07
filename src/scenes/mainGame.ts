@@ -18,7 +18,8 @@ export default class MainGame extends Phaser.Scene
 		let scene = this;
 		let shared = BearPoke.shared();
 
-		let bg: BG = new BG(this);
+		let bg: Phaser.GameObjects.Image = new BG(this).backgroundImage;
+
 		let scorecardBG: Phaser.GameObjects.Rectangle = this.add.rectangle(0, 0, 180, 24, 0x000000);
 		scorecardBG.setOrigin(0, 0);
 		scorecardBG.alpha = 0.667;
@@ -55,7 +56,7 @@ export default class MainGame extends Phaser.Scene
 			{
 				scene.draw(scene);
 				scene.drawTimer(scene);
-				console.log('gameLoop: %o', new Date().getTime());
+				// console.log('gameLoop: %o', new Date().getTime());
 				if (BearPoke.shared().isGameOver)
 				{
 					clearInterval(gameLoop);

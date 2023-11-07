@@ -14,7 +14,8 @@ export default class GameOver extends Phaser.Scene
 		const menuX: number = this.cameras.main.width - menuWidth;
 		const menuY: number = 0;
 
-		let bg: BG = new BG(this);
+		let bg: Phaser.GameObjects.Image = new BG(this).backgroundImage;
+
 		let scoreBG: Phaser.GameObjects.Rectangle = this.add.rectangle(0, 0, this.cameras.main.width - menuWidth, this.cameras.main.height, 0x000000);
 		scoreBG.setOrigin(0, 0);
 		scoreBG.setBlendMode(Phaser.BlendModes.MULTIPLY);
