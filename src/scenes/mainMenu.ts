@@ -47,49 +47,66 @@ export default class MainMenu extends Phaser.Scene
 		let x: number;
 		let y: number;
 
-		const buttonOffsetX = 8;
-		const buttonOffsetY = 8;
+		const buttonOffsetX: number = 	8;
+		const buttonOffsetY: number = 	8;
 		const buttonWidth: number = menuWidth - buttonOffsetX * 2.0;
 		const buttonScale: number = buttonWidth / 40; // the button image is 40px wide
 		const buttonHeight: number = 76.0;
-		const buttons: Phaser.GameObjects.Image[] = [
-			this.add.image(menuX + buttonOffsetX, menuY + buttonOffsetY, 'button'),
-			this.add.image(menuX + buttonOffsetX, menuY + buttonHeight + buttonOffsetY * 2.0, 'button'),
-			this.add.image(menuX + buttonOffsetX, menuY + buttonHeight * 2.0 + buttonOffsetY * 3.0, 'button'),
-		];
+		let buttons: Phaser.GameObjects.Image[] = [];
 
-		buttons.forEach( function (button) {
+		const texts: string[] = [
+			'New Game',
+			'Credits',
+			'Quit',
+		];
+		const numButtons: number = 		3;
+		const indexNewGame = 0;
+		const indexCredits = 1;
+		const indexQuit = 2;
+
+		for (let i = 0; i < numButtons; i++)
+		{
+			let button = this.add.image(menuX + buttonOffsetX, menuY + buttonHeight * i + buttonOffsetY * (i + 1), 'button');
 			button.setOrigin(0, 0);
 			button.setScale(buttonScale);
 			button.setInteractive();
-		});
+			buttons.push(button);
+		}
+		let index = 0;
 
-		x = buttons[0].x + buttonOffsetX;
-		y = buttons[0].y + buttonOffsetY;
-		const newGameText = this.add.text(x, y, 'New Game', { color: '#000000' })
-		newGameText.scale = 2.25;
-		buttons[0].on('pointerup', function (){
-			scene.start('MainGame');
-			scene.stop('MainMenu');
-		}, this);
+		while (index < texts.length)
+		{
+			x = buttons[index].x + buttonOffsetX;
+			y = buttons[index].y + buttonOffsetY;
+			let text = this.add.text(x, y, texts[index], { color: '#000000' })
+			text.scale = 2.25;
 
-		x = buttons[1].x + buttonOffsetX;
-		y = buttons[1].y + buttonOffsetY;
-		const attributionText = this.add.text(x, y, 'Credits', { color: '#000000' })
-		attributionText.scale = 2.25;
-		buttons[1].on('pointerup', function (){
-			scene.start('Credits');
-			scene.stop('MainMenu');
-		}, this);
+			switch (index)
+			{
+				case indexNewGame:
+					buttons[index].on('pointerup', function (){
+					scene.start('MainGame');
+					scene.stop('MainMenu');
+				}, this);
+				break;
+				case indexCredits:
+					buttons[index].on('pointerup', function (){
+						scene.start('Credits');
+						scene.stop('MainMenu');
+					});
+				break;
+				case indexQuit:
+					buttons[index].on('pointerup', function (){
+						scene.start('Quit');
+						scene.stop('MainMenu');
+					});
+				break;
+				default:
+				break;
+			}
 
-		x = buttons[2].x + buttonOffsetX;
-		y = buttons[2].y + buttonOffsetY;
-		const quitText = this.add.text(x, y, 'Quit', { color: '#000000' })
-		quitText.scale = 2.25;
-		buttons[2].on('pointerup', function (){
-			scene.start('Quit');
-			scene.stop('MainMenu');
-		}, this);
+			index++;
+		}
 	}
 
 	createAnimals() {
