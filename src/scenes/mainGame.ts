@@ -64,6 +64,40 @@ export default class MainGame extends Phaser.Scene
 		}, 1000 / frameRate);
 	}
 
+	drawText(scene: MainGame, text: string)
+	{
+		if (!text) return;
+		const x = 8;
+		const y = scene.cameras.main.height - 80;
+		let textColor = "#FFFFFF";
+
+		let textArt: Phaser.GameObjects.Text = scene.add.text(x, y, text, { fontFamily:'verdana', color: textColor });
+		textArt.setOrigin(0, 0);
+		// textArt.setShadow(0, 0, '#000000', 2, true, true);
+		// textArt.setAlpha(0.8)
+		if (text == 'bear')
+		{
+			text = 'Don\'t poke the bear!';
+			// textColor = '#FF5555';
+			// textArt.setColor(textColor);
+		}
+		else
+		{
+			text = 'Poke the ' + text + '!';
+		}
+		text = text.toUpperCase();
+		textArt.setText(text);
+		textArt.scale = 2.0;
+
+		const decayTime = 1_000;
+		let decayTween = scene.tweens.add({targets: textArt, alpha: 0.0, ease: 'Power1', delay:decayTime * 0.5, duration: decayTime});
+		decayTween.on('complete', function () {
+			textArt.destroy();
+		});
+
+		return textArt;
+	}
+
 	drawPokeDust(scene: MainGame, x: number = 0, y: number = 0)
 	{
 		const key = 'pokeDust';
@@ -207,6 +241,7 @@ export default class MainGame extends Phaser.Scene
 		{
 			let disappearNow:Phaser.Tweens.Tween = scene.tweens.add({ targets: gameObject, scale: 0.0, alpha: 0.0, ease: 'Power1', duration: appearanceTime});
 			scene.drawPokeDust(scene, gameObject.x, gameObject.y);
+			scene.drawText(scene, gameObject.texture.key);
 			disappearNow.on('complete', function () {
 				disappearNow.remove();
 				if (BearPoke.shared().isGameOver) return;
