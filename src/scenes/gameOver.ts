@@ -32,11 +32,18 @@ export default class GameOver extends Phaser.Scene
 		let scoreText = this.add.text(16, text.y * 2 + text.height * 2 + 64, 'score', { color: '#FFFFFF' });
 		scoreText.setBlendMode(Phaser.BlendModes.ADD);
 		scoreText.scale = 2.0;
+		let timeStopped = BearPoke.shared().stoppedTime;
+		let timeStarted = BearPoke.shared().startTime;
+		let delta = (timeStopped - timeStarted) / 1_000;
+		let time = delta.toFixed(1);
+
 		scoreText.setText([
 			'Score: ' + BearPoke.shared().score,
+			'', // empty line
 			'Pokes: ' + BearPoke.shared().pokes,
 			'Healz: ' + BearPoke.shared().healingAnimals,
-			'',
+			'time:\n' +  time,
+			'', // empty line
 			'Bear Pokes:\n' + BearPoke.shared().bearPokes,
 
 		]);

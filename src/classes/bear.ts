@@ -7,6 +7,8 @@ class BearPoke //implements BearPokeInterface
 	hearts: number;
 	drawLimit: number;
 	lastPoke: number;
+	startTime: number;
+	stoppedTime: number;
 
 	animals: Animal[];
 	score: number;
@@ -30,6 +32,8 @@ class BearPoke //implements BearPokeInterface
 		this.healingAnimals = 0;
 		this.timerArtWidth = 0;
 		this.lastPoke = (new Date()).getTime();
+		this.startTime = this.lastPoke;
+		this.stoppedTime = 0;
 		this.drawLimit = 2;
 		this.animals = [];
 

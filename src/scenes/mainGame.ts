@@ -130,16 +130,21 @@ export default class MainGame extends Phaser.Scene
 	update ()
 	{
 		let shared = BearPoke.shared();
-		let scoreCard: Phaser.GameObjects.Text = shared.scoreCard || this.add.text(16, 16, 'Score: 0', { color: '#FFFFFF' });;
-		scoreCard.setText([
-			'score: ' + shared.score,
-		]);
-
 		if (shared.hearts < 1)
 		{
+			shared.stoppedTime = (new Date()).getTime();
 			shared.isGameOver = true;
-			this.scene.start('GameOver');
-			this.scene.stop('MainGame');
+			const lingerTime = 1_250;
+			let timeoutDestroy = setTimeout(() => {
+				this.scene.start('GameOver');
+				this.scene.stop('MainGame');
+				clearTimeout(timeoutDestroy);
+				// timeout = null;
+			}, lingerTime);
+			let scoreCard: Phaser.GameObjects.Text = shared.scoreCard || this.add.text(16, 16, 'Score: 0', { color: '#FFFFFF' });;
+			scoreCard.setText([
+				'score: ' + shared.score,
+			]);
 		}
 	}
 
@@ -287,14 +292,6 @@ export default class MainGame extends Phaser.Scene
 				gameObject.destroy();
 			});
 		});
-
-		/**
-		 * TODO: Needs a timer
-	 	 *		Not poking anything removes 1 heart
-		 * TODO: Game over when hearts == 0
-		 * 		I think I'll just make a game over scene
-		 * 		New Game just makes a new Main Game Scene
-		 */
 	}
 
 }
