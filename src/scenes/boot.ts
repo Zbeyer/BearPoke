@@ -9,6 +9,9 @@ export default class BootScene extends Phaser.Scene
 		// backgrounds
 		this.load.image('bg', 'flowers.jpg');
 		this.load.image('bg2', 'background2.jpg');
+		this.load.image('bg3', 'bg3.jpg');
+		this.load.image('bg4', 'bg4.jpg');
+		this.load.image('bg5', 'bg5.jpg');
 
 		//logo
 		this.load.image('logo', 'logo.jpg');

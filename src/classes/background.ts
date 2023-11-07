@@ -1,6 +1,6 @@
 import 'phaser'
 
-let sharedkey = 'bg';
+let sharedkey = 'bg5';
 
 export default class BG
 {
@@ -14,7 +14,7 @@ export default class BG
 		let bg = this.scene.add.image(0, 0, this.key);
 		bg.setOrigin(0, 0);
 		bg.setScale(Math.max(scene.cameras.main.width / bg.width, scene.cameras.main.height / bg.height));
-		const fx = bg.postFX?.addBlur(0, 0, 0, 40);
+		const fx = bg.postFX?.addBlur(0, 0, 0, 8);
 		this.backgroundImage = bg;
 	}
 	static sharedKey = function(): string {
