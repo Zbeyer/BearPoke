@@ -62,3 +62,11 @@ Most notably:
 * Draw for providing the animals
 
 From the credit screen you can return to the main menu.
+
+----
+
+
+
+Original Swift Project
+
+<iframe width="480" height="640" src="https://www.youtube.com/embed/iQbYw0me86c?si=wwmxJp3emWnnoLrm" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
