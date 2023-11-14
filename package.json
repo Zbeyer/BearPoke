@@ -5,11 +5,14 @@
   "main": "src/index.js",
   "license": "MIT",
   "dependencies": {
+    "electron": "^27.0.4",
+    "electron-packager": "^17.1.2",
     "phaser": "^3.60.0"
   },
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack serve",
-    "build": "cross-env NODE_ENV=production webpack --progress"
+    "build": "cross-env NODE_ENV=production webpack --progress",
+    "start": "electron ."
   },
   "devDependencies": {
     "@babel/core": "^7.23.2",
